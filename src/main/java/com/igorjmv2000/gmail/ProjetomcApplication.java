@@ -8,8 +8,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.igorjmv2000.gmail.domain.Categoria;
+import com.igorjmv2000.gmail.domain.Cidade;
+import com.igorjmv2000.gmail.domain.Estado;
 import com.igorjmv2000.gmail.domain.Produto;
 import com.igorjmv2000.gmail.repositories.CategoriaRepository;
+import com.igorjmv2000.gmail.repositories.CidadeRepository;
+import com.igorjmv2000.gmail.repositories.EstadoRepository;
 import com.igorjmv2000.gmail.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -21,12 +25,19 @@ public class ProjetomcApplication implements CommandLineRunner{
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
+	@Autowired
+	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private EstadoRepository estadoRepository;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetomcApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+		//Categorias e Produtos
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
 		
@@ -43,6 +54,20 @@ public class ProjetomcApplication implements CommandLineRunner{
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+		
+		//Estados e Cidades
+		Estado est1 = new Estado(null, "Minas Gerais");
+		Estado est2 = new Estado(null, "São Paulo");
+		
+		Cidade c1 = new Cidade(null, "Uberlândia", est1);
+		Cidade c2 = new Cidade(null, "São Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est2);
+		
+		est1.getCidades().add(c1);
+		est2.getCidades().addAll(Arrays.asList(c2, c3));
+		
+		estadoRepository.saveAll(Arrays.asList(est1, est2));
+		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 	}
 
 }

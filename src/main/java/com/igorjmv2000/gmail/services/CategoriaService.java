@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.igorjmv2000.gmail.domain.Categoria;
 import com.igorjmv2000.gmail.repositories.CategoriaRepository;
+import com.igorjmv2000.gmail.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -17,7 +18,8 @@ public class CategoriaService {
 	public Categoria buscar(Integer id) {
 		Optional<Categoria> obj = repository.findById(id);
 		
-		return obj.orElse(null);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 	
 }

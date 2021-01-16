@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.igorjmv2000.gmail.domain.Categoria;
 import com.igorjmv2000.gmail.domain.Cidade;
+import com.igorjmv2000.gmail.domain.Cliente;
+import com.igorjmv2000.gmail.domain.Endereco;
 import com.igorjmv2000.gmail.domain.Estado;
 import com.igorjmv2000.gmail.domain.Produto;
+import com.igorjmv2000.gmail.domain.enums.TipoCliente;
 import com.igorjmv2000.gmail.repositories.CategoriaRepository;
 import com.igorjmv2000.gmail.repositories.CidadeRepository;
+import com.igorjmv2000.gmail.repositories.ClienteRepository;
+import com.igorjmv2000.gmail.repositories.EnderecoRepository;
 import com.igorjmv2000.gmail.repositories.EstadoRepository;
 import com.igorjmv2000.gmail.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class ProjetomcApplication implements CommandLineRunner{
 	
 	@Autowired
 	private EstadoRepository estadoRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetomcApplication.class, args);
@@ -68,6 +79,18 @@ public class ProjetomcApplication implements CommandLineRunner{
 		
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+		
+		//Cliente e endereços
+		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "363.789.123-77", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("(11) 92736-3323", "(35) 99383-8393"));
+		
+		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "38220-834", cli1, c1);
+		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777-012", cli1, c2);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 	}
 
 }

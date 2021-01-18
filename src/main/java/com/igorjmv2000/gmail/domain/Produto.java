@@ -2,7 +2,9 @@ package com.igorjmv2000.gmail.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -32,6 +35,9 @@ public class Produto implements Serializable{
 	)
 	private List<Categoria> categorias = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
 	public Produto() {}
 
 	public Produto(Integer id, String nome, Double preco) {
@@ -39,6 +45,14 @@ public class Produto implements Serializable{
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
+	}
+	
+	public List<Pedido> getPedidos(){
+		List<Pedido> list = new ArrayList<>();
+		for(ItemPedido x : itens) {
+			list.add(x.getPedido());
+		}
+		return list;
 	}
 
 	public Integer getId() {
@@ -67,6 +81,10 @@ public class Produto implements Serializable{
 
 	public List<Categoria> getCategorias() {
 		return categorias;
+	}
+
+	public Set<ItemPedido> getItens() {
+		return itens;
 	}
 
 	@Override
